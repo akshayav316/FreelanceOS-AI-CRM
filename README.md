@@ -104,6 +104,27 @@ Update Status
 - Analytics Dashboard
 
 ---
+## 📸 Screenshots
+
+### Workflow 1 - AI CRM
+
+![Workflow 1](screenshots/workflow1.png.png)
+
+### Workflow 2 - Follow-up Automation
+
+![Workflow 2](screenshots/workflow2.png.png)
+
+### CRM Sheet
+
+![CRM Sheet](screenshots/crm-sheet.png.png)
+
+### Gmail Drafts
+
+![Draft 1](screenshots/gmail-draft1.png.png)
+
+![Draft 2](screenshots/gmail-draft2.png.png)
+
+![Draft 3](screenshots/gmail-draft3.png.png)
 
 ## 👩‍💻 Author
 
