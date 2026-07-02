@@ -107,7 +107,7 @@ Update Status
 
 ## 👩‍💻 Author
 
-Akshaya
+Akshaya V
 
 Computer Science Undergraduate
 
