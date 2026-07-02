@@ -1,0 +1,518 @@
+{
+  "name": "AI CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d796074d-b013-4df8-bcc9-13172d58828f",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qJbvLgKXx2P2IpEW",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are FreelanceOS, an AI assistant for freelance developers and designers.\n\nAnalyze the email below and return ONLY valid JSON.\n\nEmail Information\n\nSubject:\n{{ $json.Subject }}\n\nFrom:\n{{ $json.From }}\n\nEmail:\n{{ $json.snippet }}\n\nYour tasks:\n\n1. Extract the client's name if available. If unavailable, return an empty string.\n\n2. Categorize the email as one of:\n- New Lead\n- Existing Client\n- Payment\n- Follow-up\n- Support\n- Proposal\n- Meeting\n- Marketing\n- Other\n\n3. Assign priority:\n- Low\n- Medium\n- High\n\n4. Summarize the email in one concise sentence.\n\n5. Identify the project type.\n\n6. Detect sentiment:\n- Positive\n- Neutral\n- Negative\n- Urgent\n\n7. Assign a Business Opportunity Score from 0 to 100.\n\n8. Determine whether follow-up is required.\n\n9. Suggest follow-up days.\n\n10. Determine the Lead Temperature based on the Business Opportunity Score:\n\n90–100 → Hot\n70–89 → Warm\n0–69 → Cold\n\n11. Draft a professional and friendly email reply.\n\nIMPORTANT RULES:\n\n- If the email is from a real client, prospect, freelancer, business, or person, ALWAYS generate a professional reply.\n- If the email is an automated notification (Google, GitHub, LinkedIn, Stripe, PayPal, Microsoft, Amazon, system alerts, newsletters, OTPs, receipts, invoices, or security alerts), return an empty string:\n\n\"reply_email\": \"\"\n\n- The reply should be ready to save as a Gmail draft.\n- Do not include a subject line.\n- Do not use Markdown.\n- Sign the email:\n\nBest,\nAkshaya\nReturn an additional JSON field:\n\n\"lead_temperature\"\n\nThe value must be exactly one of:\n- Hot\n- Warm\n- Cold\n\nDo not return any text outside the JSON.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "53e24486-7d32-4879-8ae1-a9f549c5f6ab",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        208
+      ],
+      "id": "2cfea267-b554-4268-af69-97e86dc84169",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "sT4lqYlBRKnFzwhl",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"client_name\": \"John Doe\",\n  \"category\": \"New Lead\",\n  \"priority\": \"High\",\n  \"summary\": \"Client is looking for a freelance developer to build an e-commerce website.\",\n  \"project_type\": \"E-commerce Website\",\n  \"sentiment\": \"Positive\",\n  \"business_opportunity_score\": 92,\n  \"follow_up_required\": true,\n  \"follow_up_days\": 2,\n  \"lead_temperature\": \"Warm\",\n  \"reply_email\": \"Hi John,\\n\\nThank you for reaching out. I'd be happy to discuss your e-commerce project. Based on your requirements, I believe I can help you build a scalable and modern solution. Let's schedule a quick call to discuss your goals.\\n\\nLooking forward to hearing from you!\\n\\nBest regards,\\nAkshaya\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        208
+      ],
+      "id": "49cf3731-d6f0-4dcd-9275-bd780cd6c8ee",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_name": "={{ $json.output.client_name }}",
+            "category": "={{ $json.output.category }}",
+            "priority": "={{ $json.output.priority }}",
+            "summary": "={{ $json.output.summary }}",
+            "project_type": "={{ $json.output.project_type }}",
+            "sentiment": "={{ $json.output.sentiment }}",
+            "business_opportunity_score": "={{ $json.output.business_opportunity_score }}",
+            "follow_up_required": "={{ $json.output.follow_up_required }}",
+            "follow_up_days": "={{ $json.output.follow_up_days }}",
+            "reply_email": "={{ $json.output.reply_email }}",
+            "lead_temperature": "={{ $json.output.lead_temperature }}",
+            "status": "={{ \"New Lead\" }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "project_type",
+              "displayName": "project_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "sentiment",
+              "displayName": "sentiment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_opportunity_score",
+              "displayName": "business_opportunity_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_temperature",
+              "displayName": "lead_temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "follow_up_required",
+              "displayName": "follow_up_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "follow_up_days",
+              "displayName": "follow_up_days",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reply_email",
+              "displayName": "reply_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1008,
+        176
+      ],
+      "id": "f2386da2-6d93-47ab-883c-4649796f660b",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $('Gmail Trigger').item.json.Subject }}",
+        "message": "={{ $('AI Agent').item.json.output.reply_email }}",
+        "options": {
+          "threadId": "={{ $('Gmail Trigger').item.json.threadId }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1392,
+        160
+      ],
+      "id": "eb54ebf1-0efd-4313-90dd-908a952406cd",
+      "name": "Create a draft",
+      "webhookId": "542e74fa-fa3f-47af-94a9-b819bb267d50",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "qJbvLgKXx2P2IpEW",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f5d4fd07-b944-401f-b2f8-cc1c91620d42",
+              "leftValue": "={{ $('AI Agent').item.json.output.follow_up_required }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        752,
+        192
+      ],
+      "id": "38c3d1e5-1620-4595-ad03-c9f2cd0a4858",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U",
+          "mode": "list",
+          "cachedResultName": "FreelanceOS CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1724776003,
+          "mode": "list",
+          "cachedResultName": "Followups",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GbiHGlC995XEgVfk1aLuUotVbA6KuLHOTNNYcguhb2U/edit#gid=1724776003"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "client_name": "={{ $('AI Agent').item.json.output.client_name }}",
+            "email": "={{ $('Gmail Trigger').item.json.From }}",
+            "follow_up_date": "={{ DateTime.now().plus({ days: $('AI Agent').item.json.output.follow_up_days }).toISODate() }}",
+            "status": "={{ \"Pending\" }}",
+            "business_opportunity_score": "={{ $('AI Agent').item.json.output.business_opportunity_score }}",
+            "lead_temperature": "={{\n$('AI Agent').item.json.output.business_opportunity_score >= 80\n? 'Hot'\n: $('AI Agent').item.json.output.business_opportunity_score >= 60\n? 'Warm'\n: 'Cold'\n}}",
+            "reply_email": "={{ $('AI Agent').item.json.output.reply_email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "client_name",
+              "displayName": "client_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "follow_up_date",
+              "displayName": "follow_up_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "business_opportunity_score",
+              "displayName": "business_opportunity_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_temperature",
+              "displayName": "lead_temperature",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reply_email",
+              "displayName": "reply_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1216,
+        176
+      ],
+      "id": "b6b40773-7c03-4c25-93db-b66630e9898b",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sLe12pksa7ZjD3kw",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c1fe5304-f6a6-401c-afd8-b0ea4f3bbed2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e65cf5f67bbb0aec2d94ac6f3de175c43bccf7611296de42e7899e0c9b84e6b2"
+  },
+  "nodeGroups": [],
+  "id": "Mm9Lv6eNydp1k3rA",
+  "tags": []
+}
