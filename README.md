@@ -89,6 +89,7 @@ Follow these steps to set up and run the project:
 
 > **Note:** This project requires a configured n8n environment and valid API credentials for all connected services.
 
+
 📥 AI Email Processing Workflow
 
 Incoming Gmail
