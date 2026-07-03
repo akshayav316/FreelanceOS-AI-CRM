@@ -1,4 +1,19 @@
-# FreelanceOS-AI-CRM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FreelanceOS AI CRM
+
+AI-Powered Client Relationship Management
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# FreelanceOS AI CRM
+
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
+![Built with n8n](https://img.shields.io/badge/Built%20With-n8n-orange)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT-blue)
+![Status](https://img.shields.io/badge/Status-Active-success)
+![Maintained](https://img.shields.io/badge/Maintained-Yes-brightgreen)
+
 An AI-powered CRM that automatically analyzes client emails, scores leads, generates professional Gmail drafts, and manages automated follow-ups using n8n, OpenAI, Gmail, and Google Sheets.
 
 ## 🚀 Overview
@@ -8,6 +23,20 @@ FreelanceOS AI CRM is an AI-powered customer relationship management system buil
 The system automatically reads incoming client emails, analyzes them using AI, classifies business opportunities, generates professional Gmail draft replies, stores lead information in Google Sheets, and manages automated follow-up reminders.
 
 ---
+
+## ❗ Problem
+
+Freelancers often receive dozens of client emails every week.
+
+Manually reading, replying, tracking leads, and remembering follow-ups wastes time and causes missed opportunities.
+
+## 💡 Solution
+
+FreelanceOS AI CRM is an AI-powered workflow automation system designed to simplify client communication for freelancers and small businesses.
+
+The system automatically monitors incoming Gmail messages, uses an AI agent to analyze email content, identifies potential business opportunities, extracts client information, assigns lead scores, and stores the data in Google Sheets. It also generates professional Gmail draft replies and automates follow-up reminders based on scheduled dates.
+
+By combining n8n, OpenAI, Gmail, and Google Sheets, the solution reduces repetitive manual tasks, improves response time, and helps users manage client relationships more efficiently while minimizing the risk of missed opportunities.
 
 ## ✨ Features
 
@@ -45,7 +74,21 @@ workflows/
 
 ---
 
-## 🔄 Workflow 1
+## 🚀 Getting Started
+
+1. Import the workflow JSON into n8n
+
+2. Configure
+
+- Gmail
+
+- OpenAI
+
+- Google Sheets
+
+3. Execute the workflow
+
+📥 AI Email Processing Workflow
 
 Incoming Gmail
 
@@ -67,7 +110,7 @@ Gmail Draft
 
 ---
 
-## 🔄 Workflow 2
+📅 Automated Follow-up Workflow
 
 Schedule Trigger
 
@@ -126,10 +169,12 @@ Update Status
 
 ![Draft 3](screenshots/gmail-draft3.png.png)
 
-## 👩‍💻 Author
+👩‍💻 About the Author
 
-Akshaya V
+Akshaya V is a Computer Science undergraduate passionate about AI Automation, Workflow Automation, and Software Development.
 
-Computer Science Undergraduate
+LinkedIn:https://www.linkedin.com/in/akshaya-v-0199233ab/
 
-Interested in AI Automation, Full Stack Development, and Intelligent Workflow Systems.
+## ⭐ Like this project?
+
+If you enjoyed exploring this project, don't forget to leave a ⭐ on the repository. It helps others discover the project and motivates me to keep building.
