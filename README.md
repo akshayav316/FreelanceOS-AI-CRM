@@ -76,17 +76,18 @@ workflows/
 
 ## 🚀 Getting Started
 
-1. Import the workflow JSON into n8n
+Follow these steps to set up and run the project:
 
-2. Configure
+1. Clone this repository or download the workflow files.
+2. Import the workflow JSON files into your n8n instance.
+3. Configure the required credentials:
+   - Gmail
+   - OpenAI API
+   - Google Sheets
+4. Update the workflow with your own API keys and spreadsheet IDs.
+5. Execute the workflow and test the automation.
 
-- Gmail
-
-- OpenAI
-
-- Google Sheets
-
-3. Execute the workflow
+> **Note:** This project requires a configured n8n environment and valid API credentials for all connected services.
 
 📥 AI Email Processing Workflow
 
